@@ -55,3 +55,12 @@
 .line-number {
   color: white;
 }
+.code-string {
+  color: "#db9d00";
+}
+.code-number {
+  color: "#8fd9fb";
+}
+.code-keyword {
+  color: "#305cde";
+}

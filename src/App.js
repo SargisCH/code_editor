@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
+const types = {
+  VARIABLE_DECLARATIONS: "VariableDeclaration",
+  FUNTION_DECLARATION: "FunctionDeclaration",
+};
 function App() {
   const [lines, setLines] = useState([]);
   const onChangeTextarea = (e) => {
     const text = e.target.value;
+    const textSplitted = text.split("\n");
     try {
-      const textSplitted = text.split("\n");
       const linesClonded = [...lines];
       textSplitted.forEach((lineCode, lineIndex) => {
         const lineFound = lines.find((l) => l.lineNumber === lineIndex + 1);
@@ -20,6 +25,13 @@ function App() {
       setLines(linesClonded);
       const parsed = window.esprima.parse(text);
       console.log("parsed", JSON.parse(JSON.stringify(parsed)));
+      parsed.body.forEach((el) => {
+        if (el.type === types.VARIABLE_DECLARATIONS) {
+          el.declarations.forEach((dec) => {
+            const decString = `${el.kind}${dec.id}=${dec.value}`;
+          });
+        }
+      });
     } catch (e) {
       console.log(e.toString(), e.message);
     }
